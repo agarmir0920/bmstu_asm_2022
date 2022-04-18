@@ -38,15 +38,12 @@ code segment para public 'code'
         mov ah, 0ah
         int 21h
 
-        cmp strLen, 01h
-        jb exitHexInput
-
         mov num, 0000h
         mov cx, 0000h
 
         parseLoop:
         cmp cl, strLen
-        jae exitHexInput
+        jae endParseLoop
 
         mov si, cx
 
@@ -74,7 +71,7 @@ code segment para public 'code'
 
         jmp parseLoop
 
-        exitHexInput:
+        endParseLoop:
         ret
     hexInput endp
 code ends

@@ -1,5 +1,5 @@
 extrn hexInput: near
-; extrn binOutput: near
+extrn binOutput: near
 ; extrn octOutput: near
 
 stck segment para stack 'stack'
@@ -41,7 +41,7 @@ code segment para public 'code'
     mov es, ax
 
     mov [funcPtrsArr], hexInput
-    ; mov [funcPtrsArr + 2], binOutput
+    mov [funcPtrsArr + 2], binOutput
     ; mov [funcPtrsArr + 4], octOutput
 
     mainLoop:
