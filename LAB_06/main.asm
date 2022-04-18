@@ -1,6 +1,6 @@
 extrn hexInput: near
 extrn binOutput: near
-; extrn octOutput: near
+extrn octOutput: near
 
 stck segment para stack 'stack'
     db 100h dup (0)
@@ -23,10 +23,6 @@ menu segment para public 'data'
              db 13, 10, 13, 10
              db "Input command: "
              db "$"
-
-    ; resMsg   db 13, 10
-    ;          db "Result: "
-    ;          db "$"
 menu ends
 
 numData segment para common 'data'
@@ -42,7 +38,7 @@ code segment para public 'code'
 
     mov [funcPtrsArr], hexInput
     mov [funcPtrsArr + 2], binOutput
-    ; mov [funcPtrsArr + 4], octOutput
+    mov [funcPtrsArr + 4], octOutput
 
     mainLoop:
     assume ds:menu, es:funcPtrs

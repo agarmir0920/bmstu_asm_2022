@@ -28,10 +28,10 @@ code segment para public 'code'
         mov cx, 0010h
         mov ah, 02h
 
-        binTransfLoop:
+        binOutputLoop:
 
         cmp cl, 00h
-        je exitBinOutput
+        je endBinOutput
 
         dec cl
         shl bx, 1
@@ -47,9 +47,9 @@ code segment para public 'code'
 
         printBinDigit:
         int 21h
-        jmp binTransfLoop
+        jmp binOutputLoop
 
-        exitBinOutput:
+        endBinOutput:
         ret
     binOutput endp
 code ends
