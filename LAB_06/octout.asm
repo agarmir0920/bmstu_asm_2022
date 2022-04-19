@@ -25,12 +25,25 @@ code segment para public 'code'
         mov bx, num
         mov ah, 02h
 
+        cmp bx, 8000h
+        jne prepareOutput
+
         ; знак
         shl bx, 1
         jnc startOctOutput
 
         mov dl, 2dh
         int 21h
+
+        shr bx, 1
+        add bh, 80h
+        neg bx
+
+        mov dl, 31h
+        int 21h
+
+        prepareOutput:
+        shl bx, 1
 
         startOctOutput:
         mov cx, 0005h

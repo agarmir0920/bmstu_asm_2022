@@ -7,7 +7,9 @@ stck segment para stack 'stack'
 stck ends
 
 funcPtrs segment para public 'data'
-    funcPtrsArr dw 3 dup (0)
+    assume cs:code
+    
+    funcPtrsArr dw hexInput, binOutput, octOutput
 funcPtrs ends
 
 menu segment para public 'data'
@@ -35,10 +37,6 @@ code segment para public 'code'
 
     mov ax, funcPtrs
     mov es, ax
-
-    mov [funcPtrsArr], hexInput
-    mov [funcPtrsArr + 2], binOutput
-    mov [funcPtrsArr + 4], octOutput
 
     mainLoop:
     assume ds:menu, es:funcPtrs
