@@ -6,10 +6,10 @@ code segment
 main:
     jmp init
 
-    handleAddr    dd 0
-    installed         db 1
-    curSpeed       db 1Fh
-    curTime        db 0
+    handleAddr dd 0
+    installed db 1
+    curSpeed db 1Fh
+    curTime db 0
 
 incSpeed proc near
     push ax
