@@ -5,27 +5,28 @@ using namespace std;
 
 extern "C"
 {
-    copyString(
-        const char *const dst,
-        const char *const src,
-        const size_t size);
+    char *copyString(
+                    const char *const dst,
+                    const char *const src,
+                    const size_t size);
 }
 
 size_t stringLength(const char *str)
 {
-    size_t lenght = 0;
+    size_t length = 0;
 
-    __asm__(".intel_syntax noprefix\n\t"
-            "mov al, 0\n\t"
-            "mov rdi, %1\n\t"
-            "mov rcx, -1\n\t"
+    __asm__ ("movb $0, %%al\n\t"
+            "movq %1, %%rdi\n\t"
+            "movq $-1, %%rcx\n\t"
             "repne scasb\n\t"
-            "neg rcx\n\t"
-            "sub rcx, 2\n\t"
-            "mov %0, rcx\n\t"
-            : "=r" (len)
+            "negq %%rcx\n\t"
+            "subq $2, %%rcx\n\t"
+            "movq %%rcx, %0\n\t"
+            : "=r" (length)
             : "r" (str)
             : "al", "rdi", "rcx");
+    
+    return length;
 }
 
 int main(void)

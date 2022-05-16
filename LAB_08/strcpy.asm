@@ -2,26 +2,37 @@ section .text
 
 global copyString
 
+; rdi - dst
+; rsi - src
+; rdx - size
+
 copyString:
     mov rbx, rdi
     mov rcx, rdx
+    inc rcx
 
-    cmp rdi, rsi
-    jbe copy
+    cmp rsi, rdi
+    jb srcIsLeft
+    jmp srcIsRight
 
+    srcIsLeft:
     mov rax, rdi
     sub rax, rsi
     cmp rax, rcx
-    ja copy
+    jb exit
+    jmp copy
 
-    add rdi, rcx
-    dec rdi
-    add rsi, rcx
-    dec rsi
-    std
+    srcIsRight:
+    mov rax, rsi
+    sub rax, rdi
+    cmp rax, rcx
+    jb exit
+    jmp copy
 
 copy:
-    rep movsb
     cld
+    rep movsb
+
+exit:
     mov rax, rbx
-ret
+    ret
