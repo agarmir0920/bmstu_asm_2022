@@ -4,14 +4,6 @@
 
 #define MEASURMENTS_COUNT 100
 
-#ifdef FPU
-#define getAddTime(Type) getTimeFPU<Type>
-#define getMultTime(Type) getMultTimeFPU<Type>
-#else
-#define getAddTime(Type) getTimeC<Type>
-#define getMultTime(Type) getMultTimeC<Type>
-#endif
-
 template <typename Type>
 double getAddTimeC(const Type a, const Type b)
 {
@@ -58,9 +50,9 @@ double getAddTimeFPU(const Type a, const Type b)
                 "fld %2\n"
                 "faddp\n"
                 "fstp %0\n"
-                : "=r" (res)
-                : "r" (a),
-                "r" (b));
+                : "=m" (res)
+                : "m" (a),
+                "m" (b));
     
     clock_t end = clock();
 
@@ -81,9 +73,9 @@ double getMultTimeFPU(const Type a, const Type b)
                  "fld %2\n"
                  "fmulp\n"
                  "fstp %0\n"
-                 : "=r" (res)
-                 : "r" (a),
-                   "r" (b));
+                 : "=m" (res)
+                 : "m" (a),
+                   "m" (b));
     
     clock_t end = clock();
 
@@ -92,21 +84,35 @@ double getMultTimeFPU(const Type a, const Type b)
     return time;
 }
 
+#ifdef FPU
+#define getAddTime(Type) getAddTimeFPU<Type>
+#define getMultTime(Type) getMultTimeFPU<Type>
+#else
+#define getAddTime(Type) getAddTimeC<Type>
+#define getMultTime(Type) getMultTimeC<Type>
+#endif
+
 int main()
 {
     float a = 2.5, b = 3.56;
 
     printf("SUM\n");
-    printf("float: %lf s\n", getAddTime(float)(a, b));
-    printf("double: %lf s\n", getAddTime(double)(a, b));
-    printf("float80: %lf s\n", getAddTime(__float80)(a, b));
-    printf("long double: %lf s\n\n", getAddTime(long double)(a, b));
+    printf("float: %.20lf s\n", getAddTime(float)(a, b));
+    printf("double: %.20lf s\n", getAddTime(double)(a, b));
 
-    printf("MULT\n");
-    printf("float: %lf s\n", getMultTime(float)(a, b));
-    printf("double: %lf s\n", getMultTime(double)(a, b));
-    printf("float80: %lf s\n", getMultTime(__float80)(a, b));
-    printf("long double: %lf s\n", getMultTime(long double)(a, b));
+#ifdef MNO
+    printf("float80: %.20lf s\n", getAddTime(__float80)(a, b));
+    printf("long double: %.20lf s\n", getAddTime(long double)(a, b));
+#endif
+
+    printf("\nMULT\n");
+    printf("float: %.20lf s\n", getMultTime(float)(a, b));
+    printf("double: %.20lf s\n", getMultTime(double)(a, b));
+
+#ifdef MNO
+    printf("float80: %.20lf s\n", getMultTime(__float80)(a, b));
+    printf("long double: %.20lf s\n", getMultTime(long double)(a, b));
+#endif
 
     return EXIT_SUCCESS;
 }

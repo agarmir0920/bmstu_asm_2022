@@ -12,8 +12,8 @@ double FPUSin(const double pi)
     __asm__("fld %1\n"
             "fsin\n"
             "fstp %0\n"
-            : "=r" (res)
-            : "r" (pi));
+            : "=m" (res)
+            : "m" (pi));
         
     return res;
 }
@@ -25,7 +25,7 @@ double FPUSinPi()
     __asm__("fldpi\n"
             "fsin\n"
             "fstp %0\n"
-            : "=r" (res));
+            : "=m" (res));
         
     return res;
 }
@@ -33,15 +33,15 @@ double FPUSinPi()
 double FPUSinHalfPi()
 {
     double res;
-    double div = 2;
+    double div = 2.;
 
     __asm__("fldpi\n"
-            "fld %0\n"
+            "fld %1\n"
             "fdivp\n"
             "fsin\n"
-            "fstp %1\n"
-            : "=r" (res)
-            : "r" (div));
+            "fstp %0\n"
+            : "=m" (res)
+            : "m" (div));
         
     return res;
 }
@@ -49,14 +49,14 @@ double FPUSinHalfPi()
 int main()
 {
     printf("PI:\n");
-    printf("3.14: %lf\n", FPUSin(PI1));
-    printf("3.141596: %lf\n", FPUSin(PI2));
-    printf("FPU PI: %lf\n\n", FPUSinPi());
+    printf("3.14: %.20lf\n", FPUSin(PI1));
+    printf("3.141596: %.20lf\n", FPUSin(PI2));
+    printf("FPU PI: %.20lf\n\n", FPUSinPi());
 
     printf("PI / 2:\n");
-    printf("3.14: %lf\n", FPUSin(PI1 / 2));
-    printf("3.141596: %lf\n", FPUSin(PI2 / 2));
-    printf("FPU PI: %lf\n\n", FPUSinHalfPi());
+    printf("3.14: %.20lf\n", FPUSin(PI1 / 2));
+    printf("3.141596: %.20lf\n", FPUSin(PI2 / 2));
+    printf("FPU PI: %.20lf\n\n", FPUSinHalfPi());
 
     return EXIT_SUCCESS;
 }
