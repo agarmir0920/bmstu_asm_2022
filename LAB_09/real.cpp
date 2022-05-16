@@ -54,13 +54,13 @@ double getAddTimeFPU(const Type a, const Type b)
     clock_t start = clock();
 
     for (size_t i = 0; i < MEASURMENTS_COUNT; ++i)
-        __asm__ ("fld %1\n"
-                 "fld %2\n"
-                 "faddp\n"
-                 "fstp %0\n"
-                 : "=r" (res)
-                 : "r" (a),
-                   "r" (b));
+        __asm__("fld %1\n"
+                "fld %2\n"
+                "faddp\n"
+                "fstp %0\n"
+                : "=r" (res)
+                : "r" (a),
+                "r" (b));
     
     clock_t end = clock();
 
