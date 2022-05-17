@@ -2,3 +2,5 @@
 *.COM
 *.EXE
 *.BRK
+*.exe
+*.o
