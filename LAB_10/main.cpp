@@ -4,9 +4,9 @@
 
 #define MEASURMENTS_COUNT 1e6
 
-double scMultC(const double *a, const double *b, const size_t n)
+float scMultC(const float *a, const float *b, const size_t n)
 {
-    double res = 0.0;
+    float res = 0.0;
 
     for (size_t i = 0; i < n; ++i)
         res += *(a + i) * *(b + i);
@@ -14,13 +14,16 @@ double scMultC(const double *a, const double *b, const size_t n)
     return res;
 }
 
-double scMultSSE(const double *a, const double *b, const size_t n)
+float scMultSSE(const float *src_a, const float *src_b, const size_t n)
 {
-    double res = 0.0;
+    float res = 0.0;
 
-    for (size_t i = 0; i < n; ++i)
+    __float128 *a = (__float128 *)src_a;
+    __float128 *b = (__float128 *)src_b;
+
+    for (size_t i = 0; i < n; i += sizeof(__float128) / sizeof(float), a++, b++)
     {
-        double sum = 0.0;
+        float sum = 0.0;
 
         __asm__(
                 "movaps xmm0, %1\n"
@@ -41,26 +44,26 @@ double scMultSSE(const double *a, const double *b, const size_t n)
 
 int main()
 {
-    double a[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double b[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    float a[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    float b[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-    clock_t time = clock();
+    clock_t start = clock();
 
     for (size_t i = 0; i < MEASURMENTS_COUNT; ++i)
         scMultC(a, b, 10);
     
-    time = (double)(clock() - time) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
+    float time = (float)(clock() - start) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
 
-    printf("C: %.20lf\n", time);
+    printf("C: %.20f\n", time);
 
-    time = clock();
+    start = clock();
 
     for (size_t i = 0; i < MEASURMENTS_COUNT; ++i)
         scMultSSE(a, b, 10);
     
-    time = (double)(clock() - time) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
+    time = (float)(clock() - start) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
 
-    printf("SSE: %.20lf\n", time);
+    printf("SSE: %.20f\n", time);
 
     return EXIT_SUCCESS;
 }
