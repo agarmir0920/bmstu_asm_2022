@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <ctime>
 
-#define MEASURMENTS_COUNT 100
+#define MEASURMENTS_COUNT 1000000
 
 template <typename Type>
 double getAddTimeC(const Type a, const Type b)
