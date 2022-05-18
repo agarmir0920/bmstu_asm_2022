@@ -30,7 +30,6 @@ float scMultSSE(const float *src_a, const float *src_b, const size_t n)
                 "movaps xmm1, %2\n"
                 "mulps xmm0, xmm1\n"
                 "haddps xmm0, xmm0\n"
-                "haddps xmm0, xmm0\n"
                 "movss %0, xmm0\n"
                 : "=m"(sum)
                 : "m"(*a), "m"(*b)
@@ -54,7 +53,7 @@ int main()
     
     float time = (float)(clock() - start) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
 
-    printf("C: %.20f\n", time);
+    printf("C:\t%.20f\n", time);
 
     start = clock();
 
@@ -63,7 +62,7 @@ int main()
     
     time = (float)(clock() - start) / MEASURMENTS_COUNT / CLOCKS_PER_SEC;
 
-    printf("SSE: %.20f\n", time);
+    printf("SSE:\t%.20f\n", time);
 
     return EXIT_SUCCESS;
 }
